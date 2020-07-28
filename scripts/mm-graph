@@ -55,10 +55,10 @@ def parse_ports(s):
     for i in range(len(tmp)):
         if ":" in tmp[i]:
             f,l = tmp[i].split(":")
-            ports += range(int(f),int(l)+1)
+            ports += list(range(int(f),int(l)+1))
         else:
             ports.append(int(tmp[i]))
-    return map(lambda x : str(x), ports)
+    return [str(x) for x in ports]
 
 log = args.log
 ms_per_bin = args.ms_per_bin
@@ -66,7 +66,7 @@ ports_to_track = []
 agg_ports = {}
 agg_names = []
 if args.agg is not None and args.ports is not None:
-    print "ERROR: can only specify aggregate list OR port list"
+    print("ERROR: can only specify aggregate list OR port list")
     parser.print_help()
     sys.exit(-1)
 
@@ -89,7 +89,7 @@ if args.agg is not None:
                 if not name in agg_names:
                     agg_names.append(name)
     except:
-        print "ERROR: error parsing aggregate flow list. format is: [portlist]=[key name]"
+        print("ERROR: error parsing aggregate flow list. format is: [portlist]=[key name]")
         parser.print_help()
         sys.exit(-1)
 
@@ -100,7 +100,7 @@ if args.ports is not None:
         try:
             ports_to_track = parse_ports(args.ports)
         except:
-            print "ERROR: error parsing port list."
+            print("ERROR: error parsing port list.")
             parser.print_help()
             sys.exit(-1)
 
@@ -111,25 +111,25 @@ if args.link_dir is not None:
     elif 'down' in args.link_dir:
         uplink = False
     else:
-        print "ERROR: unknown link direction type"
+        print("ERROR: unknown link direction type")
         parser.print_help()
         sys.exit(-1)
 
 
 if args.bg is not None:
     if not os.path.exists(args.bg):
-        print "ERROR: could not find bg file", args.bg
+        print("ERROR: could not find bg file", args.bg)
         parser.print_help()
         sys.exit(-1)
 else:
     if args.plot_expected or args.nimbus is not None:
-        print "ERROR: requires --bg FILE"
+        print("ERROR: requires --bg FILE")
         parser.print_help()
         sys.exit(-1)
 
 if args.nimbus is not None:
     if not os.path.exists(args.nimbus):
-        print "ERROR: could not find nimbus file", args.nimbus
+        print("ERROR: could not find nimbus file", args.nimbus)
         parser.print_help()
         sys.exit(-1)
 
@@ -251,8 +251,8 @@ if len(all_delays) <= 0:
     sys.exit("must have at least one departure event")
 
 
-arr_flows = flatten(map(lambda x : x.keys(), arrivals.values()))
-dep_flows = flatten(map(lambda x : x.keys(), departures.values()))
+arr_flows = flatten([list(x.keys()) for x in list(arrivals.values())])
+dep_flows = flatten([list(x.keys()) for x in list(departures.values())])
 all_observed_flows = set(arr_flows + dep_flows)
 flows_to_track = []
 flow_to_name = {}
@@ -329,9 +329,9 @@ if agg_names:
         sys.stderr.write("\t%s %.2f Mbit/s %.1f%%\n" % (agg.split(" ")[0], thru, util))
 
 ### compile data for gnuplot
-keys = [arrivals.keys(),departures.keys(),capacity.keys()]
-first_bin = min(map(lambda x : min(x), keys))
-last_bin = max(map(lambda x : max(x), keys))
+keys = [list(arrivals.keys()),list(departures.keys()),list(capacity.keys())]
+first_bin = min([min(x) for x in keys])
+last_bin = max([max(x) for x in keys])
 if first_bin == last_bin:
     sys.exit("ms_per_bin=%d is too short for %.2f second trace" % (ms_per_bin, duration))
 
@@ -515,7 +515,7 @@ if args.bg:
                 time_to_mode[t] = mode
 
     except Exception as e:
-        print "ERROR: error parsing bg file --",e
+        print("ERROR: error parsing bg file --",e)
         parser.print_help()
         sys.exit(-1)
 
@@ -534,7 +534,7 @@ if args.bg:
 
 
         except Exception as e:
-            print "ERROR: error parsing nimbus output file --",e
+            print("ERROR: error parsing nimbus output file --",e)
             parser.print_help()
             sys.exit(-1)
     
