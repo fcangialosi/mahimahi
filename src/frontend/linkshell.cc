@@ -26,7 +26,7 @@ void usage_error( const string & program_name )
     cerr << "          --meter-all" << endl;
     cerr << "          --uplink-queue=QUEUE_TYPE --downlink-queue=QUEUE_TYPE" << endl;
     cerr << "          --uplink-queue-args=QUEUE_ARGS --downlink-queue-args=QUEUE_ARGS" << endl;
-    cerr << "          --q=QUEUE_TYPE,QUEUE_ARGS" << endl;
+    cerr << "          --both=QUEUE_TYPE,QUEUE_ARGS" << endl;
     cerr << "          --cbr" << endl;
     cerr << "                (if --cbr is used, UPLINK-TRACE and DOWNLINK-TRACE should be desired bitrate" << endl;
     cerr << "                 rather than filename, expressed as \"XK\" for X Kbps or \"XM\" for X Mbps)" << endl;
