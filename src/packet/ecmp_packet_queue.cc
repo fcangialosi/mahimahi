@@ -110,8 +110,8 @@ QueuedPacket ECMPPacketQueue::dequeue( void )
     while (i < num_queues_) {
         DropTailPacketQueue *q = internal_queues_[(curr_queue_ + i) % num_queues_];
         if (!q->empty()) {
-            if (mean_jitter_ > 0 && (now - q->peek().arrival_time) >= poisson_gen_(prng_)) {
-                ret = q->dequeue(); 
+            if ((mean_jitter_ == 0) || (mean_jitter_ > 0 && (now - q->peek().arrival_time) >= poisson_gen_(prng_))) {
+                ret = q->dequeue();
                 qlen_bytes_ -= ret.contents.size();
                 qlen_pkts_--;
                 i++;
