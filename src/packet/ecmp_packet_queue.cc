@@ -16,13 +16,15 @@ ECMPPacketQueue::ECMPPacketQueue( const string & args )
       curr_queue_      (0),
       qlen_bytes_      (0),
       qlen_pkts_       (0),
-      work_conserving_ ((bool) get_arg(args, "nonworkconserving") == 0),
+      work_conserving_ ((bool) get_arg(args, "workconserving") == 1),
+      per_flow_        ((bool) get_arg(args, "perflow") == 1),
       mean_jitter_     ((size_t) get_arg(args, "mean_jitter")),
       prng_( random_device()() ),
-      poisson_gen_( get_arg(args, "mean_jitter") )
+      poisson_gen_( get_arg(args, "mean_jitter") ),
+      uniform_gen_( 0, ((size_t) get_arg(args, "queues") - 1) )
 {
     if (num_queues_ == 0) {
-        throw runtime_error( "ECMP queue must have > 0 queues" );
+        throw runtime_error( "ECMP queue must have > 0 internal queues" );
     }
 
     for (size_t i=0; i < num_queues_; i++) {
@@ -81,9 +83,13 @@ void ECMPPacketQueue::enqueue(QueuedPacket &&p ) {
 
     size_t hash;
     if(p.contents.size() < 28) { 
-        hash = 1;
+        hash = 0;
     } else {
-        hash = hash_flow(p.contents.substr(FIVE_TUPLE_START, FIVE_TUPLE_LEN).c_str());
+        if (per_flow_) {
+            hash = hash_flow(p.contents.substr(FIVE_TUPLE_START, FIVE_TUPLE_LEN).c_str());
+        } else {
+            hash = uniform_gen_(prng_);
+        }
     }
     size_t qid = hash % num_queues_;
 

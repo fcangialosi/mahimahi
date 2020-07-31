@@ -37,7 +37,8 @@ void usage_error( const string & program_name )
     cerr << "                  target, interval, qdelay_ref, max_burst are in milli-second" << endl << endl;
     cerr << "           Additional QUEUE_ARGS for ECMP only:" << endl;
     cerr << "             * queues            : number of internal queues" << endl;
-    cerr << "             * nonworkconserving : 0 = wc, 1 = not wc" << endl;
+    cerr << "             * workconserving    : 1 = wc, 0 = not wc" << endl;
+    cerr << "             * perflow           : 1 = per-flow balancing, 0 = per-packet spraying" << endl;
     cerr << "             * seed              : seed for pRNG, only needed for delay jitter" << endl;
     cerr << "             * mean_jitter       : mean of poisson process for calculating delay jitter, if 0, no jitter" << endl;
 

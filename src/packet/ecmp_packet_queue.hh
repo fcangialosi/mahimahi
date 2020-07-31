@@ -19,10 +19,12 @@ private:
            qlen_bytes_,
            qlen_pkts_;
     bool   work_conserving_;
-    size_t mean_jitter_;
+    size_t per_flow_,
+           mean_jitter_;
 
     std::default_random_engine prng_;
     std::poisson_distribution<size_t> poisson_gen_;
+    std::uniform_int_distribution<size_t> uniform_gen_;
 
     std::vector<DropTailPacketQueue*> internal_queues_ {};
 
