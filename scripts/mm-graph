@@ -144,7 +144,7 @@ def find_agg_name(flow):
     return None
 
 def ms_to_bin(ms):
-    return ms / ms_per_bin
+    return int(ms / ms_per_bin)
 
 def bin_to_seconds(b):
     return "%.3f" % (b * ms_per_bin / 1000.0)
@@ -360,7 +360,7 @@ with open(TMP_FILE, 'w') as f:
     current_buf_bytes = 0
 
     if args.plot_direction == "egress":
-        for tbin in range(int(first_bin), int(last_bin+1)):
+        for tbin in range(first_bin, last_bin+1):
             t = bin_to_seconds( tbin )
 
             dep_t = bits_to_mbps(departures[tbin]['sum']) if tbin in departures else 0
