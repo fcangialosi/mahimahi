@@ -575,7 +575,7 @@ if agg_names:
                 util = "{:.1f}".format(100.0 * (bits_to_mbps(departure_sum[agg], duration) / avg_capacity))+"%"
             )) if args.key else 'notitle'),
             lw=lw
-        ))
+        ).encode())
         col+=1
         first_gplot_line = False
 
